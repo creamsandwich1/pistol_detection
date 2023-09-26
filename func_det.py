@@ -50,32 +50,3 @@ def show_pred_image(prediction: list) -> None:
     """
     res_plotted = prediction[0].plot()[:, :, ::-1]
     st.image(res_plotted)
-
-
-def webcam_detect(model: YOLO, conf: float) -> None:
-    """
-    Считывает кадры с вебкамеры, выводит картинку с предиктами
-
-    :param model: YOLO модель для предикта
-    :param conf: уверенность модели
-    :return: None
-    """
-    cap = cv2.VideoCapture(0)
-
-    frame_placeholder = st.empty()
-
-    stop_button = st.button("Остановить запись")
-
-    while cap.isOpened() and not stop_button:
-
-        ret, frame = cap.read()
-
-        if not ret:
-            st.write("Запись окончена")
-
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-        results = model(frame, conf=conf)
-        predict_frame = results[0].plot()
-
-        frame_placeholder.image(predict_frame, channels="RGB")
