@@ -1,7 +1,7 @@
 import streamlit as st
 
 from PIL import Image
-from func_det import load_model, make_prediction, show_pred_image
+from func_det import load_model, show_pred_image,  save_image, download_prediction
 
 st.sidebar.header('Настройки')
 
@@ -25,5 +25,7 @@ model = load_model("models/yolov8n_v3.pt")
 
 if st_image:
     pil_image = Image.open(st_image)
-    result_pil_image = make_prediction(model, pil_image, conf=confidence_slider)
+    result_pil_image = model(pil_image, conf=confidence_slider)
     show_pred_image(result_pil_image)
+    save_image(result_pil_image)
+    download_prediction("temp/images/output.png", "your_detection.png")
